@@ -5,7 +5,6 @@ on:
     inputs:
       path:
         description: 'Path to the project folder. Defaults to the repository root folder.'
-        required: false
         default: '.'
         type: string
       platforms:
@@ -19,6 +18,10 @@ on:
       dockerhub_repository:
         description: "The dockerhub repository. Defaults to the github repository name."
         default: ${{ github.event.repository.name }}
+        type: string
+      context:
+        description: "The docker build context. Defaults to the repository root folder."
+        default: "."
         type: string
       dockerfile:
         description: "Path to the Dockerfile. (default {context}/Dockerfile)"
@@ -66,6 +69,7 @@ jobs:
       platforms: ${{ inputs.platforms }}
       dockerhub_username: ${{ inputs.dockerhub_username }}
       dockerhub_repository: ${{ inputs.dockerhub_repository }}
-      context: ${{inputs.path}}
+      context: ${{inputs.context}}
+      dockerfile: ${{inputs.dockerfile}}
     secrets:
       dockerhub_token: ${{ secrets.dockerhub_token }}

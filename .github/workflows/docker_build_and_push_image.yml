@@ -7,10 +7,6 @@ on:
         description: "The image name."
         type: string
         required: true
-      platforms:
-        description: "What platforms to build for."
-        type: string
-        default: "linux/amd64,linux/arm64"
       dockerhub_username:
         description: "Your dockerhub username. Defaults to 'spuxx'."
         default: spuxx
@@ -39,14 +35,15 @@ jobs:
     strategy:
       matrix:
         node-version: [22]
+        platforms: [linux/amd64, linux/arm64]
     timeout-minutes: 60
     steps:
     - uses: actions/checkout@v4
-
+    
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
       with:
-        platforms: ${{ inputs.platforms }}
+        platforms: ${{ matrix.platforms }}
 
     - name: Set up Docker Buildx
       id: buildx
@@ -65,7 +62,7 @@ jobs:
         context: ${{ inputs.context }}
         file: ${{ inputs.context }}/${{ inputs.dockerfile }}
         tags: ${{ inputs.image_names }}
-        platforms: ${{ inputs.platforms }}
+        platforms: ${{ matrix.platforms }}
     - name: Finish
       shell: bash
       run: |

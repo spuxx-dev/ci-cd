@@ -7,10 +7,6 @@ on:
         description: 'Path to the project folder. Defaults to the repository root folder.'
         default: '.'
         type: string
-      platforms:
-        description: "What platforms to build for."
-        type: string
-        default: "linux/amd64,linux/arm64"
       dockerhub_username:
         description: "Your dockerhub username. Defaults to 'spuxx'."
         default: spuxx
@@ -66,7 +62,6 @@ jobs:
     - determine_image_tags
     with:
       image_names: ${{ needs.determine_image_tags.outputs.tags }}
-      platforms: ${{ inputs.platforms }}
       dockerhub_username: ${{ inputs.dockerhub_username }}
       dockerhub_repository: ${{ inputs.dockerhub_repository }}
       context: ${{inputs.context}}

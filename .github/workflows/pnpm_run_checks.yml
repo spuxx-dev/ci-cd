@@ -8,11 +8,10 @@ on:
         type: string
         required: false
         default: ''
-      PNPM_BUILD:
-        description: "Whether to run pnpm -r build before checks"
-        type: boolean
+      PREPARE:
+        description: "A script to run before the actual checks are to be performed."
+        type: string
         required: false
-        default: false
       CHECK_COMMAND:
         description: "Command to run required checks like linting, formatting, etc."
         type: string
@@ -43,11 +42,11 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Build packages
-      if: ${{ inputs.PNPM_BUILD }}
-      run: pnpm -r build
+    - name: Prepare
+      if: ${{ inputs.PREPARE }}
+      run: ${{ inputs.PREPARE }}
 
     - name: Run checks
       env:
         CHECK_COMMAND: ${{ inputs.CHECK_COMMAND }}
-      run: pnpm run $CHECK_COMMAND
+      run: pnpm run ${{ inputs.CHECK_COMMAND }}

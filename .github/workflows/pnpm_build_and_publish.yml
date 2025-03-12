@@ -18,6 +18,11 @@ on:
         type: string
         required: false
         default: 'latest'
+      BUILD_COMMAND:
+        description: "The build command. By default, will build everything in the workspace."
+        type: string
+        required: false
+        default: 'pnpm -r build'
     secrets:
       NPM_TOKEN:
         description: "Token to authenticate with npm registry"
@@ -49,7 +54,7 @@ jobs:
       run: pnpm -r install --frozen-lockfile
 
     - name: Build
-      run: pnpm -r build
+      run: ${{ inputs.BUILD_COMMAND }}
 
     - name: Setup .npmrc file
       working-directory: ${{ inputs.PATH }}

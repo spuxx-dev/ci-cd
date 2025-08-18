@@ -45,12 +45,12 @@ on:
 
 jobs:
   extract_project_info:
-    uses: spuxx-dev/ci-cd/.github/workflows/misc_extract_project_info.yml@v4.1.0
+    uses: spuxx-dev/ci-cd/.github/workflows/misc_extract_project_info.yml@v5.0.0
     with:
       path: ${{ inputs.path }}
 
   determine_image_tags:
-    uses: spuxx-dev/ci-cd/.github/workflows/docker_determine_image_tags.yml@v4.1.0
+    uses: spuxx-dev/ci-cd/.github/workflows/docker_determine_image_tags.yml@v5.0.0
     needs:
       - extract_project_info
     with:
@@ -61,7 +61,7 @@ jobs:
       latest: ${{ inputs.latest }}
 
   build_and_push_image:
-    uses: spuxx-dev/ci-cd/.github/workflows/docker_build_and_push_image.yml@v4.1.0
+    uses: spuxx-dev/ci-cd/.github/workflows/docker_build_and_push_image.yml@v5.0.0
     needs:
       - determine_image_tags
     with:

@@ -7,16 +7,20 @@ on:
         description: "The image name."
         type: string
         required: true
-      dockerhub_username:
-        description: "Your dockerhub username. Defaults to 'spuxx'."
+      registry:
+        description: "The registry to use. Defaults to 'ghcr.io'."
+        default: ghcr.io
+        type: string
+      username:
+        description: "The username to log into the registry with. Defaults to 'spuxx'."
         default: spuxx
         type: string
-      dockerhub_repository:
-        description: "The dockerhub repository. Defaults to the github repository name."
+      repository:
+        description: "The repository on the registry to publish to. Defaults to the github repository name."
         default: ${{ github.event.repository.name }}
         type: string
       context:
-        description: "Build's context is the set of files located in the specified PATH or URL (default repo root folder)"
+        description: "The docker build context. Defaults to the repository root folder."
         default: "."
         type: string
       dockerfile:
@@ -24,8 +28,8 @@ on:
         default: Dockerfile
         type: string
     secrets:
-      dockerhub_token:
-        description: "The dockerhub access token."
+      token:
+        description: "The registry's access token."
         required: true
 
 jobs:
@@ -52,8 +56,9 @@ jobs:
     - name: Log in to DockerHub
       uses: docker/login-action@v3
       with:
-        username: ${{ inputs.dockerhub_username }}
-        password: ${{ secrets.dockerhub_token }}
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.username }}
+        password: ${{ secrets.token }}
 
     - name: Build and push
       uses: docker/build-push-action@v6

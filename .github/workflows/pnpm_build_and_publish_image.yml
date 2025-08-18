@@ -1,4 +1,4 @@
-name: Build a PNPM project and publish the container
+name: Build a PNPM project and publish the docker image
 
 on:
   workflow_call:

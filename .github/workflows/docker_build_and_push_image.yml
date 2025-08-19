@@ -12,8 +12,8 @@ on:
         default: ghcr.io
         type: string
       username:
-        description: "The username to log into the registry with. Defaults to 'spuxx'."
-        default: spuxx
+        description: "Your registry username. Defaults to the GitHub repository owner."
+        default: ${{ github.repository_owner }}
         type: string
       repository:
         description: "The repository on the registry to publish to. Defaults to the github repository name."

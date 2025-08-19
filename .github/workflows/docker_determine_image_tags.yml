@@ -51,7 +51,7 @@ jobs:
       run: |
         # Initialize tags array
         tags=()
-        prefix="${{ inputs.registry }}/${{ inputs.dockerhub_username }}/${{ inputs.dockerhub_repository }}"
+        prefix="${{ inputs.registry }}/${{ inputs.username }}/${{ inputs.repository }}"
         if [[ "${{ inputs.tag }}" == "branch" ]]; then
           echo "Using tagging pattern 'branch'."
           # Add branch-based tag

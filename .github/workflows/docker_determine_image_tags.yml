@@ -2,12 +2,16 @@ name: Determine Image Tags
 on:
   workflow_call:
     inputs:
-      dockerhub_username:
-        description: "Your dockerhub username. Defaults to 'spuxx'."
+      registry:
+        description: "The registry to use. Defaults to 'ghcr.io'."
+        default: ghcr.io
+        type: string
+      username:
+        description: "The username to log into the registry with. Defaults to 'spuxx'."
         default: spuxx
         type: string
-      dockerhub_repository:
-        description: "The dockerhub repository. Defaults to the github repository name."
+      repository:
+        description: "The repository on the registry to publish to. Defaults to the github repository name."
         default: ${{ github.event.repository.name }}
         type: string
       project_version:
@@ -47,7 +51,7 @@ jobs:
       run: |
         # Initialize tags array
         tags=()
-        prefix="${{ inputs.dockerhub_username }}/${{ inputs.dockerhub_repository }}"
+        prefix="${{ inputs.registry }}/${{ inputs.dockerhub_username }}/${{ inputs.dockerhub_repository }}"
         if [[ "${{ inputs.tag }}" == "branch" ]]; then
           echo "Using tagging pattern 'branch'."
           # Add branch-based tag

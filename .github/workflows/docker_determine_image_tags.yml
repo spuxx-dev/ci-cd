@@ -8,8 +8,8 @@ on:
         default: ghcr.io
         type: string
       username:
-        description: "Your registry username. Defaults to 'spuxx'."
-        default: spuxx
+        description: "Your registry username. Defaults to the GitHub repository owner."
+        default: ${{ github.repository_owner }}
         type: string
       image_name:
         description: "Optional image name prefix for the tag. If provided, creates tags like registry/username/repository:image_name-{tag}"

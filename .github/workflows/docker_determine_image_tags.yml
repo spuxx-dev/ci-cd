@@ -10,6 +10,10 @@ on:
         description: "The username to log into the registry with. Defaults to 'spuxx'."
         default: spuxx
         type: string
+      image_name:
+        description: "Optional image name prefix for the tag. Useful for monorepo setups."
+        required: false
+        type: string
       repository:
         description: "The repository on the registry to publish to. Defaults to the github repository name."
         default: ${{ github.event.repository.name }}
@@ -51,34 +55,47 @@ jobs:
       run: |
         # Initialize tags array
         tags=()
-        prefix="${{ inputs.registry }}/${{ inputs.username }}/${{ inputs.repository }}"
+        
+        # Base repository path remains constant
+        repo_path="${{ inputs.registry }}/${{ inputs.username }}/${{ inputs.github_repository }}"
+        echo "Repository path: ${repo_path}"
+        
+        # Determine tag parts based on the tagging pattern
         if [[ "${{ inputs.tag }}" == "branch" ]]; then
           echo "Using tagging pattern 'branch'."
-          # Add branch-based tag
-          tags+=("${GITHUB_REF##*/}-$(date +%Y%m%d%H%M%S)-${GITHUB_SHA::7}")
+          tag_suffix="${GITHUB_REF##*/}-$(date +%Y%m%d%H%M%S)-${GITHUB_SHA::7}"
         elif [[ "${{ inputs.tag }}" == "version" ]]; then
           echo "Using tagging pattern 'version'."
-          tags+=("${{ inputs.project_version }}")
+          tag_suffix="${{ inputs.project_version }}"
         else
           echo "Invalid tagging pattern: '${{ inputs.tag }}'"
           exit 1
         fi
-
+        
+        # Apply image_name prefix if provided
+        if [[ -n "${{ inputs.image_name }}" ]]; then
+          echo "Using image name prefix: ${{ inputs.image_name }}"
+          tag_base="${{ inputs.image_name }}-${tag_suffix}"
+        else
+          echo "No image name prefix provided"
+          tag_base="${tag_suffix}"
+        fi
+        
+        # Add the main tag
+        tags+=("${repo_path}:${tag_base}")
+        
         # Add 'latest' tag if specified
         if [[ "${{ inputs.latest }}" == "true" ]]; then
-            tags+=("latest")
+            if [[ -n "${{ inputs.image_name }}" ]]; then
+                tags+=("${repo_path}:${{ inputs.image_name }}-latest")
+            else
+                tags+=("${repo_path}:latest")
+            fi
         fi
 
-        # Apply prefix to each tag
-        prefixed_tags=()
-        for tag in "${tags[@]}"; do
-            prefixed_tags+=("${prefix}:${tag}")
-        done
-
-        # Join prefixed tags array into a comma-separated string
-        tags_string=$(IFS=,; echo "${prefixed_tags[*]}")
+        # Join tags array into a comma-separated string
+        tags_string=$(IFS=,; echo "${tags[*]}")
 
         # Set output for use in subsequent steps
         echo "tags=${tags_string}" >> $GITHUB_OUTPUT
         echo "Generated tags: ${tags_string}"
-

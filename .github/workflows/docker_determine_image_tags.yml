@@ -1,21 +1,22 @@
 name: Determine Image Tags
+
 on:
   workflow_call:
     inputs:
       registry:
-        description: "The registry to use. Defaults to 'ghcr.io'."
+        description: "The container registry to use. Defaults to 'ghcr.io'."
         default: ghcr.io
         type: string
       username:
-        description: "The username to log into the registry with. Defaults to 'spuxx'."
+        description: "Your registry username. Defaults to 'spuxx'."
         default: spuxx
         type: string
       image_name:
-        description: "Optional image name prefix for the tag. Useful for monorepo setups."
+        description: "Optional image name prefix for the tag. If provided, creates tags like registry/username/repository:image_name-{tag}"
         required: false
         type: string
-      repository:
-        description: "The repository on the registry to publish to. Defaults to the github repository name."
+      github_repository:
+        description: "The GitHub repository name for the image."
         default: ${{ github.event.repository.name }}
         type: string
       project_version:
@@ -56,7 +57,7 @@ jobs:
         # Initialize tags array
         tags=()
         
-        # Base repository path remains constant
+        # Base repository path includes the repository name
         repo_path="${{ inputs.registry }}/${{ inputs.username }}/${{ inputs.github_repository }}"
         echo "Repository path: ${repo_path}"
         
@@ -81,7 +82,7 @@ jobs:
           tag_base="${tag_suffix}"
         fi
         
-        # Add the main tag
+        # Add the main tag with proper format
         tags+=("${repo_path}:${tag_base}")
         
         # Add 'latest' tag if specified

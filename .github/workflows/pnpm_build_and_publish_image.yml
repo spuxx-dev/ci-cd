@@ -54,8 +54,9 @@ jobs:
     needs:
       - extract_project_info
     with:
-      dockerhub_username: ${{ inputs.username }}
-      dockerhub_repository: ${{ inputs.repository }}
+      registry: ${{ inputs.registry }}
+      username: ${{ inputs.username }}
+      repository: ${{ inputs.repository }}
       project_version: ${{ needs.extract_project_info.outputs.version }}
       tag: ${{ inputs.tag }}
       latest: ${{ inputs.latest }}

@@ -19,6 +19,10 @@ on:
         description: "The repository on the registry to publish to. Defaults to the github repository name."
         default: ${{ github.event.repository.name }}
         type: string
+      image_name:
+        description: "Optional image name prefix for the tag. Useful for monorepo setups."
+        required: false
+        type: string
       context:
         description: "The docker build context. Defaults to the repository root folder."
         default: "."
@@ -57,6 +61,7 @@ jobs:
       registry: ${{ inputs.registry }}
       username: ${{ inputs.username }}
       repository: ${{ inputs.repository }}
+      image_name: ${{ inputs.image_name }}
       project_version: ${{ needs.extract_project_info.outputs.version }}
       tag: ${{ inputs.tag }}
       latest: ${{ inputs.latest }}

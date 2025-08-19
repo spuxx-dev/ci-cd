@@ -15,8 +15,8 @@ on:
         description: "Optional image name prefix for the tag. If provided, creates tags like registry/username/repository:image_name-{tag}"
         required: false
         type: string
-      github_repository:
-        description: "The GitHub repository name for the image."
+      repository:
+        description: "The repository name for the image. Defaults to the GitHub repository name"
         default: ${{ github.event.repository.name }}
         type: string
       project_version:
@@ -58,7 +58,7 @@ jobs:
         tags=()
         
         # Base repository path includes the repository name
-        repo_path="${{ inputs.registry }}/${{ inputs.username }}/${{ inputs.github_repository }}"
+        repo_path="${{ inputs.registry }}/${{ inputs.username }}/${{ inputs.repository }}"
         echo "Repository path: ${repo_path}"
         
         # Determine tag parts based on the tagging pattern

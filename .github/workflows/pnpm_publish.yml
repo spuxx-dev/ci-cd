@@ -13,10 +13,6 @@ on:
         type: string
         required: false
         default: ''
-    secrets:
-      NPM_TOKEN:
-        description: "Token to authenticate with npm registry"
-        required: true
 
 jobs:
   check_version:
@@ -75,11 +71,6 @@ jobs:
       with:
         path: dist
         key: dist
-
-    - name: Setup .npmrc file
-      run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     - name: Publish to npm
       run: |

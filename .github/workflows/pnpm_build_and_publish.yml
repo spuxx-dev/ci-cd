@@ -24,6 +24,10 @@ on:
         required: false
         default: 'pnpm -r build'
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build_and_publish:
     name: Build and publish

@@ -23,10 +23,6 @@ on:
         type: string
         required: false
         default: 'pnpm -r build'
-    secrets:
-      NPM_TOKEN:
-        description: "Token to authenticate with npm registry"
-        required: true
 
 jobs:
   build_and_publish:

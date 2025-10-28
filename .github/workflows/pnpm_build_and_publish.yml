@@ -52,17 +52,9 @@ jobs:
     - name: Build
       run: ${{ inputs.BUILD_COMMAND }}
 
-    - name: Setup .npmrc file
-      working-directory: ${{ inputs.PATH }}
-      run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
     - name: Publish to npm
       working-directory: ${{ inputs.PATH }}
       run: |
-        echo "Publishing as:"
-        npm whoami
         echo "Publishing artifact."
         pnpm publish --no-git-checks --access public --tag ${{ inputs.TAG }}
 

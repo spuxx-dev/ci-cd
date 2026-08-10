@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22]
+        node-version: [24[
         platforms: [linux/amd64, linux/arm64]
     timeout-minutes: 60
     steps:

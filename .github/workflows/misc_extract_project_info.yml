@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22]
+        node-version: [24[
     timeout-minutes: 5
     outputs:
       name: ${{ steps.extract_project_info.outputs.name }}

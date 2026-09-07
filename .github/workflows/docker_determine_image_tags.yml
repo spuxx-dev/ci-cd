@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [24[
+        node-version: [24]
     timeout-minutes: 5
     outputs:
       tags: ${{ steps.determine_image_tags.outputs.tags }}
